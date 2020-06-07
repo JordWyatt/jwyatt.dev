@@ -1,0 +1,36 @@
+h3 {
+  font-family: "Montserrat", serif;
+}
+
+html {
+  background-color: #2a363b;
+}
+
+body {
+  color: white;
+}
+
+small {
+  color: #fecea8;
+}
+
+header > h1 {
+  color: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  color: #ff847c;
+}
+
+blockquote {
+  color: #fecea8;
+  border-color: #fecea8;
+}
+
+/* https://colorhunt.co/palette/13313 */
