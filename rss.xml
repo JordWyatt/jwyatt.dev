@@ -1,1 +1,313 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[jwyatt.dev]]></title><description><![CDATA[A blog by Jordan Wyatt, a London based backend engineer.]]></description><link>http://jordwyatt.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 07 Jun 2020 22:06:12 GMT</lastBuildDate><item><title><![CDATA[Building a CLI torrent client in Node.js]]></title><description><![CDATA[Coming soon.]]></description><link>http://jordwyatt.github.io/building-a-torrent-client-in-node-js/</link><guid isPermaLink="false">http://jordwyatt.github.io/building-a-torrent-client-in-node-js/</guid><pubDate>Sun, 07 Jun 2020 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;Coming soon.&lt;/p&gt;</content:encoded></item></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[jwyatt.dev]]></title><description><![CDATA[A blog by Jordan Wyatt, a London based backend engineer.]]></description><link>http://jordwyatt.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 28 Jun 2020 16:57:09 GMT</lastBuildDate><item><title><![CDATA[Using Python to work around a 2 month notice period]]></title><description><![CDATA[Source Code The Problem Finding property is monotonous, there is no question about it. RightMove is, as far as I’m aware, the most popular…]]></description><link>http://jordwyatt.github.io/rightmove-scraper/</link><guid isPermaLink="false">http://jordwyatt.github.io/rightmove-scraper/</guid><pubDate>Sat, 27 Jun 2020 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://github.com/JordWyatt/rightmove-by-notice-period&quot;&gt;Source Code&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;The Problem&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;Finding property is monotonous, there is no question about it.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://rightmove.co.uk&quot;&gt;RightMove&lt;/a&gt; is, as far as I’m aware, the most popular property search site in the U.K. I’d been spending a lot of time on the site trying to search for a new rental whilst working around my agreed 8 week notice period.&lt;/p&gt;
+&lt;p&gt;This process involved (for each potential location):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Performing a search&lt;/li&gt;
+&lt;li&gt;Setting up a daily email alert for new properties&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For each property in the daily alert email&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Check if the listing has its date of availability listed&lt;/li&gt;
+&lt;li&gt;Ensure this date is at least 8 weeks away from the current date&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Most of the time the properties were available sooner than needed which was not only a waste of time, but created cycles of excitement and disappointment.&lt;/p&gt;
+&lt;p&gt;I couldn’t be bothered anymore. The lack of ability to filter on ‘Date Available’ was driving me mad, so I decided to automate the process.&lt;/p&gt;
+&lt;h3&gt;Finding Candidate Properties&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;To scrape RightMove I used Python in conjunction with &lt;a href=&quot;https://www.crummy.com/software/BeautifulSoup/bs4/doc/&quot;&gt;BeautifulSoup&lt;/a&gt;. To anyone who is familiar with either of these technologies the contents of this post will probably bore you, however, as someone who had only used Python for a brief period during my degree this felt like the perfect learning opportunity.&lt;/p&gt;
+&lt;p&gt;For those unfamiliar, BeautifulSoup is a Python package for parsing HTML. It creates a parse tree for parsed pages which allows developers to easily extract information from HTML by traversing the tree.&lt;/p&gt;
+&lt;p&gt;The first step was to add the ability to configure and perform searches to provide the results page containing listings for scraping.&lt;/p&gt;
+&lt;p&gt;Let’s disect a manual search to see the necessary components:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/93d68a4635e2043f389dfc6c301bf525/d9ed5/search.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 34.45945945945946%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAYAAAAIy204AAAACXBIWXMAABYlAAAWJQFJUiTwAAABXklEQVQoz61QTU/CQBDtf/W/eJGDIcFQhPAlgbaE70g0IRDQ6AUSNcaDiDYVykdbChWRbtvn7iZw8ugkL/tmdufNmxWenl+gTXTo+hRjek6nM3Q6t5AKZUjFGmSliny+hALNGWS5wnNJqlBehaLUsFgYWK3W6PXuIcznBoyFCdO0YBgWNG2MSqUJUcwgkcghlSpwLkbTiNM8Hr9AVEwjFssgmcwjSe9te4XtdotmswXBdV0wBEGA/whhubS53fXawWbzjW73DtmsgnL5ErlcEY3GNdrtG1qTOVfoN9TrV7xWKjW4K7ZRq9UDIQQCs6vrM7quyUWHw3cMBo/o9x84WM4ajo9PEYkkEAqdIRw+h6p+YjRSoX1oUN9UTLQJ35I7ZGKWtYTjfPH1Pc/DbueC0PPA6XTGCfH4m30Qig3FDwUXZCL7YAXf9w9gzUz0r2BDfIqMo+FI7+PEfgUJfPwC7CnzO459aUEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Search&quot;
+        title=&quot;Search&quot;
+        src=&quot;/static/93d68a4635e2043f389dfc6c301bf525/fcda8/search.png&quot;
+        srcset=&quot;/static/93d68a4635e2043f389dfc6c301bf525/12f09/search.png 148w,
+/static/93d68a4635e2043f389dfc6c301bf525/e4a3f/search.png 295w,
+/static/93d68a4635e2043f389dfc6c301bf525/fcda8/search.png 590w,
+/static/93d68a4635e2043f389dfc6c301bf525/efc66/search.png 885w,
+/static/93d68a4635e2043f389dfc6c301bf525/c83ae/search.png 1180w,
+/static/93d68a4635e2043f389dfc6c301bf525/d9ed5/search.png 2880w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The above search generates a request to &lt;a href=&quot;https://www.rightmove.co.uk/property-to-rent/find.html&quot;&gt;https://www.rightmove.co.uk/property-to-rent/find.html&lt;/a&gt; with the following query string parameters&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b908c0ec7e336ab8d6dc52603f680e94/c6ff8/params.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 50.67567567567568%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAYAAAC0VX7mAAAACXBIWXMAABYlAAAWJQFJUiTwAAAA80lEQVQoz5WSzW7DIBCE8w6VjY0DeGPA4N+kadq+/4tNFyxFbS8th9EeWD7NaPY0zzvW7Y7t+gYfVgxDQLATRjvDDxFErkinppHQ4w4TX6FZjibMmmUYqDzSe4ky0Ex3mPUD5HeQJLzUNapaoBINhGiLdDgMV2i3IrKzvqP8UOrsh0PFwIvdQJoj1g3q5CwtCFkMPyLHG8zyDr08oD2DlUP7a/G/4CMyQ1IpFLgUu+cyksukKs/2Cf0LfDgMNyh2uZgFn5cH3NllqOU5qhFG9iUOu3w2PUfuKfJnkwFJmpVK6tpzGVDxEaeWO6mfUb9LFET+AqpNCnAvqOapAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Parameters&quot;
+        title=&quot;Parameters&quot;
+        src=&quot;/static/b908c0ec7e336ab8d6dc52603f680e94/fcda8/params.png&quot;
+        srcset=&quot;/static/b908c0ec7e336ab8d6dc52603f680e94/12f09/params.png 148w,
+/static/b908c0ec7e336ab8d6dc52603f680e94/e4a3f/params.png 295w,
+/static/b908c0ec7e336ab8d6dc52603f680e94/fcda8/params.png 590w,
+/static/b908c0ec7e336ab8d6dc52603f680e94/efc66/params.png 885w,
+/static/b908c0ec7e336ab8d6dc52603f680e94/c6ff8/params.png 1088w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Most of this is self explanatory and uninteresting, one thing that did stick out is the location identifier. RightMove appear to use their own propriatary region identifiers which would need to be provided in configuration for each location I wanted to search over.&lt;/p&gt;
+&lt;p&gt;Once I’d nabbed the appropriate location identifiers and popped them in a configuration file, I was able to write the function to perform a search over these location identifiers to retrieve the search result pages for each location. The result pages were then processed using the &lt;code class=&quot;language-text&quot;&gt;get_listing_urls&lt;/code&gt; function to pull the URL for each property in the result set.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;config.ini&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;[locations]
+identifiers = REGION^93802,REGION^87521
+
+[filters]
+availableAfterNWeeks = 7
+radius=1
+minPrice = 0
+maxPrice = 1500
+minBedrooms = 2
+maxBedrooms = 3
+dontShow=houseShare,retirement,student
+furnishTypes=unfurnished,partFurnished&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rightmove_scraper.py&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;scrape_listings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; location_identifiers&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      listings &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; identifier &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; location_identifiers&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         url &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;build_search_url&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;identifier&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+         listings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;extend&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;scrape&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      listings &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;remove_duplicate_listings&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; listings
+
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;build_search_url&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; location_identifier&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      parameters &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;items&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;filters&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      parameters&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;append&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;locationIdentifier&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; location_identifier&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      search_url &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;base_search_url &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; urlencode&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;parameters&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; search_url
+
+
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;scrape&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      html &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; requests&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;text
+      listing_dom &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; BeautifulSoup&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;html&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;html.parser&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      location &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_location_name&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing_dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;Scraping properties in &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;location&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;...&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      listing_urls &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_listing_urls&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing_dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      listings &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Listing&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; url &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; listing_urls&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; listing &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         listing&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;scrape_details&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; listings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Scraping Property Information&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;In the above snippet &lt;code class=&quot;language-text&quot;&gt;listing_urls&lt;/code&gt; is a list containing URLs for each property returned from a search over a specific location identifier. The HTML returned from each of these URLs needed to be scraped to extract information relevant to my search.&lt;/p&gt;
+&lt;p&gt;Here is an example of a property listing on RightMove:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ee870e31dd25071643e4faeffb882d5a/8b69f/result.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 168.24324324324326%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,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&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Result&quot;
+        title=&quot;Result&quot;
+        src=&quot;/static/ee870e31dd25071643e4faeffb882d5a/fcda8/result.png&quot;
+        srcset=&quot;/static/ee870e31dd25071643e4faeffb882d5a/12f09/result.png 148w,
+/static/ee870e31dd25071643e4faeffb882d5a/e4a3f/result.png 295w,
+/static/ee870e31dd25071643e4faeffb882d5a/fcda8/result.png 590w,
+/static/ee870e31dd25071643e4faeffb882d5a/efc66/result.png 885w,
+/static/ee870e31dd25071643e4faeffb882d5a/8b69f/result.png 912w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The information I needed from this page was&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The descriptive title (i.e 2 bedroom flat)&lt;/li&gt;
+&lt;li&gt;The price&lt;/li&gt;
+&lt;li&gt;The location&lt;/li&gt;
+&lt;li&gt;The nearest tube stations&lt;/li&gt;
+&lt;li&gt;The date available, which can be empty, ‘Now’ or a string date&lt;/li&gt;
+&lt;li&gt;Whether the flat is furnished or not&lt;/li&gt;
+&lt;li&gt;The deposit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thankfully, this was just a case of identifying appropriate HTML tags and / or CSS selectors and processing the strings appropriately. Here is a snippet of the code used to scrape listings. Each of the &lt;code class=&quot;language-text&quot;&gt;get&lt;/code&gt; methods just select text between appropriate elements in the DOM representation returned by BeautifulSoup.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;listing.py&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Listing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;url &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; url
+
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;get_dom&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      html &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; requests&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;text
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; BeautifulSoup&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;html&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;html.parser&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;scrape_details&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      dom &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_dom&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      letting_information &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_letting_information&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date_scraped &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;today&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;strftime&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;%d/%m/%Y&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;description &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_description&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_price&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;location &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_address&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;nearest_stations &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_nearest_stations&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dom&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date_available &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; letting_information&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;date_available&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;furnished &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; letting_information&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;furnishing&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;deposit &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; letting_information&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;deposit&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Filtering Results&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;At this point the script was able to provide a collection of listings which had been posted in the last 24 hours in the configured locations. Now it was time to filter the results based on the star of the show, the ‘Date Available’ property.&lt;/p&gt;
+&lt;p&gt;To do so, the string dates were converted to date objects and were filtered using a list comprehension using Pythons standard comparison operators. If the date available is after the current date + N weeks, where N weeks is the number of weeks specified in &lt;code class=&quot;language-text&quot;&gt;configuration.ini&lt;/code&gt;, then the property is included in the final result set.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;filter_listings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;filters&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;availableAfterNWeeks&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         listings &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_listings_available_after_n_weeks&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+               &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;filters&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;availableAfterNWeeks&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; listings
+
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;get_listings_available_after_n_weeks&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; n_weeks&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; listings
+
+      &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+         &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&apos;Filtering listings down only those available after &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;n_weeks&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; weeks from now&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;convert_date&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;strptime&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;%d/%m/%Y&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      today &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      delta &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;timedelta&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;weeks&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;n_weeks&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      available_after &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;today &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; delta&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;listing &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; listing &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; listings &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; listing&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;has_date_available&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt; convert_daye&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date_available&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; available_after&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This leaves us with a list of properties uploaded to RightMove in the last 24 hours, in the required locations, available at a time where I would not need to pay two lots of rent. All that’s left is to persist this data and automate the execution.&lt;/p&gt;
+&lt;h3&gt;Persistence, Notification and Automation&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;For persistence I decided to store the listings in a Google Sheets worksheet. Although a little unconventional compared to a database this allowed both me and my partner to easily look at the results of the scraping in an interface familiar to both of us.&lt;/p&gt;
+&lt;p&gt;Each listing is appended to the sheet if it does not already exist, which is deduced by checking if the listing URL already exists in sheet. To interact with the Google Sheets API I used &lt;a href=&quot;https://github.com/burnash/gspread&quot;&gt;gspread&lt;/a&gt; which provides a clean interface for opening and modifying worksheets.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rightmove_scraper.py&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;process_listings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+   written&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; duplicates &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;sheet&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;add_listings&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+   message &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; dedent&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;&quot;&quot;
+            &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; eligible properties were found.
+            &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;written&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; new properties were added to the worksheet &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;sheet_name&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;.
+            &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;duplicates&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; properties already existed on the sheet and were ignored.
+            &quot;&quot;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;message&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+   &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;has_section&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;mailer&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt; written&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      mailer_config &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;items&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;mailer&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      Mailer&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;mailer_config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;send_mail&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;message&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;sheet.py&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Sheet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add_listings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Writing listings to sheet...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      duplicates &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+      written &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; listing &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; listings&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         is_existing_listing &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;does_cell_exist_with_value&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; is_existing_listing&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+               row &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;build_row&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+               self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;worksheet&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;insert_row&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+               written &lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+               duplicates &lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;written&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; duplicates&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;build_row&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; listing&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      row &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+      listing_details &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;vars&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; attribute &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; propertyMappings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;items&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+         row&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;append&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listing_details&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;attribute&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; row
+   &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When ran, we get a spreadsheet that looks as follows:
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3f0da52085c21f82997c9f95e36d6ca7/082c8/sheet.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 19.594594594594593%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAYAAACOXx+WAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAuElEQVQY012OwY6DMAxE+f9f3EORVgsCqckmsR1MgKkdqh5qaeRYk3n28Duv+Hn8oW77LW0oJCilgJiRc8a2bYgxIphEBM8QzCe0dthcwSz2btB9x5ByQcwVz3KYWu/BZjGYh1NK2O3jPM8YxxFE1Je55+WequK6LpzniUGEQaKIdOCfGoIBE2m/qtbaAd6XZcG6rj3ss/tefpnrA2S+gYkPZDGod1aoBTzE70sdOE3TZ4F7DvkGvgBX4TWr1GZAnQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Sheet&quot;
+        title=&quot;Sheet&quot;
+        src=&quot;/static/3f0da52085c21f82997c9f95e36d6ca7/fcda8/sheet.png&quot;
+        srcset=&quot;/static/3f0da52085c21f82997c9f95e36d6ca7/12f09/sheet.png 148w,
+/static/3f0da52085c21f82997c9f95e36d6ca7/e4a3f/sheet.png 295w,
+/static/3f0da52085c21f82997c9f95e36d6ca7/fcda8/sheet.png 590w,
+/static/3f0da52085c21f82997c9f95e36d6ca7/efc66/sheet.png 885w,
+/static/3f0da52085c21f82997c9f95e36d6ca7/c83ae/sheet.png 1180w,
+/static/3f0da52085c21f82997c9f95e36d6ca7/082c8/sheet.png 2734w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;As a final touch, I setup email notifications using &lt;a href=&quot;https://docs.python.org/3/library/smtplib.html&quot;&gt;smtplib&lt;/a&gt; to nofitfy me whenever new properties were added to the sheet.&lt;/p&gt;
+&lt;p&gt;The final step was to automate the execution. I did consider using this as an opportunity to learn AWS Lambda but ended up running the script hourly via a CRON job on a Raspberry Pi.&lt;/p&gt;
+&lt;h3&gt;Wrapping Up&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;The script has been nicely ticking away for a few weeks now, saving me hours of manually finding and tracking which properties were available in the required timeframe.&lt;/p&gt;
+&lt;p&gt;It’s not pretty, it’s not particularly clever and there are a number of improvements that could be made, however, it solved my problem and has saved me time which was the aim of the game.&lt;/p&gt;
+&lt;p&gt;If you want to have a play, the source can be found &lt;a href=&quot;https://github.com/JordWyatt/rightmove-by-notice-period&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Thanks for reading :)&lt;/p&gt;</content:encoded></item></channel></rss>
