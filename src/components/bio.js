@@ -24,6 +24,7 @@ const Bio = () => {
       site {
         siteMetadata {
           author
+          email
           description
           social {
             twitter
@@ -33,15 +34,15 @@ const Bio = () => {
     }
   `)
 
-  const { author, social, description } = data.site.siteMetadata
+  const { author, social, description, email } = data.site.siteMetadata
   return (
-    <div
-      style={{
-        display: `flex`,
-        marginBottom: rhythm(2.5),
-      }}
-    >
-      {/* <Image
+    <div style={{ marginBottom: rhythm(2.5) }}>
+      <div
+        style={{
+          display: `flex`,
+        }}
+      >
+        {/* <Image
         fixed={data.avatar.childImageSharp.fixed}
         alt={author}
         style={{
@@ -54,7 +55,11 @@ const Bio = () => {
           borderRadius: `50%`,
         }}
       /> */}
-      <p>{description}</p>
+        <div>{description}</div>
+      </div>
+      <div>
+        Click <a href={`mailto: ${email}`}>here</a> if you want to get in touch
+      </div>
     </div>
   )
 }

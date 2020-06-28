@@ -9,10 +9,10 @@ const Layout = ({ location, title, children }) => {
 
   if (location.pathname === rootPath) {
     header = (
-      <h1
+      <h3
         style={{
-          ...scale(1.5),
-          marginBottom: rhythm(1.5),
+          //...scale(1.5),
+          //marginBottom: rhythm(1.5),
           marginTop: 0,
         }}
       >
@@ -25,7 +25,7 @@ const Layout = ({ location, title, children }) => {
         >
           {title}
         </Link>
-      </h1>
+      </h3>
     )
   } else {
     header = (
