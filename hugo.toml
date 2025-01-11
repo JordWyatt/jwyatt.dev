@@ -1,0 +1,4 @@
+baseURL = 'https://jwyatt.dev/'
+languageCode = 'en-GB'
+title = 'jordan wyatt'
+theme = 'no-style-please'
