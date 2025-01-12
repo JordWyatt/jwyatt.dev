@@ -1,0 +1,29 @@
+[[entries]]
+title = "info"
+
+  [[entries.entries]]
+  title = "linkedin"
+  url = "https://www.linkedin.com/in/jordan-wyatt-20049189/"
+
+  [[entries.entries]]
+  title = "github"
+  url = "https://github.com/JordWyatt"
+
+
+[[entries]]
+title = "all posts"
+
+  [entries.post_list]
+  limit = 5
+  show_more = true
+  show_more_text = "See archive..."
+  show_more_url = "posts"
+
+[[entries]]
+title = "posts by category"
+
+  [entries.post_list]
+  section = "posts"
+  show_more = true
+  show_more_text = "See more posts..."
+  show_more_url = "posts"
